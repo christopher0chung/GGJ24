@@ -112,7 +112,6 @@ Shader "PToonShader_Face"
 			float fadeDist = UnityComputeShadowFadeDistance(data.worldPos, zDist);
 			ase_lightAtten = UnityMixRealtimeAndBakedShadows(data.atten, bakedAtten, UnityComputeShadowFade(fadeDist));
 			#endif
-			float4 color257 = IsGammaSpace() ? float4(0,0,0,0) : float4(0,0,0,0);
 			float2 break135_g33 = i.uv_texcoord;
 			float2 appendResult136_g33 = (float2(break135_g33.x , ( 1.0 - break135_g33.y )));
 			float2 FlipBookUV141_g33 = appendResult136_g33;
@@ -128,7 +127,8 @@ Shader "PToonShader_Face"
 			float2 appendResult93_g33 = (float2(temp_output_92_0_g33 , ( temp_output_92_0_g33 - -0.01 )));
 			float2 break105_g33 = ( ( FlipBookUV141_g33 / appendResult83_g33 ) + ( floor( ( appendResult95_g33 * appendResult93_g33 ) ) / appendResult83_g33 ) );
 			float2 appendResult139_g33 = (float2(break105_g33.x , ( 1.0 - break105_g33.y )));
-			float4 lerpResult250 = lerp( _Albedo , color257 , tex2D( _FaceSheet, appendResult139_g33 ).a);
+			float4 tex2DNode30 = tex2D( _FaceSheet, appendResult139_g33 );
+			float4 lerpResult250 = lerp( _Albedo , tex2DNode30 , tex2DNode30.a);
 			float4 FlatColor61 = lerpResult250;
 			float4 temp_output_35_0 = ( FlatColor61 * _ShadowTint );
 			float4 lerpResult33 = lerp( FlatColor61 , temp_output_35_0 , _ShadowTintStrength);
@@ -276,7 +276,7 @@ Node;AmplifyShaderEditor.CommentaryNode;71;-704.9181,585.8954;Inherit;False;816.
 Node;AmplifyShaderEditor.CommentaryNode;65;-1760.324,-279.3956;Inherit;False;1635.569;502.6198;Comment;9;195;34;33;35;62;64;133;36;31;Unlit Color Calc;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;47;-1758.208,327.4812;Inherit;False;943.0303;333.4733;Comment;6;72;45;39;40;150;149;Shadow Region;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;48;-1218.195,1125.246;Inherit;False;1005.347;341.9011;Comment;4;50;74;51;49;Lit Region;1,1,1,1;0;0
-Node;AmplifyShaderEditor.ColorNode;31;-1724.724,-117.0601;Inherit;False;Property;_ShadowTint;Shadow Tint;12;0;Create;True;0;0;0;False;0;False;0,0,0,0;0.1981132,0.1758725,0.1616678,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;31;-1724.724,-117.0601;Inherit;False;Property;_ShadowTint;Shadow Tint;12;0;Create;True;0;0;0;False;0;False;0,0,0,0;0.1981131,0.1758725,0.1616678,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.ClampOpNode;72;-1058.896,376.289;Inherit;True;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.GetLocalVarNode;66;-682.307,639.7967;Inherit;False;61;FlatColor;1;0;OBJECT;;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;80;-447.7306,714.3457;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
@@ -384,7 +384,7 @@ WireConnection;249;6;156;0
 WireConnection;118;0;117;0
 WireConnection;210;11;219;0
 WireConnection;250;0;84;0
-WireConnection;250;1;257;0
+WireConnection;250;1;30;0
 WireConnection;250;2;30;4
 WireConnection;61;0;250;0
 WireConnection;251;24;254;0
@@ -392,4 +392,4 @@ WireConnection;251;4;253;2
 WireConnection;251;5;253;1
 WireConnection;30;1;251;0
 ASEEND*/
-//CHKSM=1BBA571A7D39A3A9BA6599CA5E60356BB3A4C083
+//CHKSM=0244D0B0CF6DC32735446105588155520DDE37F8

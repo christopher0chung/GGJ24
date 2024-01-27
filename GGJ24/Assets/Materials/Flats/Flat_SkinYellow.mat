@@ -110,6 +110,6 @@ Material:
     - _Color: {r: 1, g: 0.76470596, b: 0.14509805, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LightColor: {r: 1, g: 0.9576786, b: 0.8915094, a: 0}
-    - _RowsAndColums: {r: 5, g: 5, b: 0, a: 0}
+    - _RowsAndColums: {r: 4, g: 4, b: 0, a: 0}
     - _ShadowTint: {r: 0.19811317, g: 0.17587253, b: 0.16166782, a: 1}
   m_BuildTextureStacks: []
