@@ -6,6 +6,7 @@ using CDCGameKit;
 
 public class B_NPC : MonoBehaviour
 {
+    public Transform exit;
     public string firstName, lastName;
 
     public B_NPC speakingToLogic;
@@ -164,6 +165,17 @@ public class B_NPC : MonoBehaviour
             if (foundSomeone == false) speakingTo = middleOfParty;
         }
         else speakingTo = middleOfParty;
+    }
+
+    public void KickOut()
+    {
+        // change flag that you've been kicked out
+        // change face material to be sad faced
+        // fire an event
+        // agent.destination exit
+        
+
+        // in update, if flagged and distance to exit is low, destory
     }
 }
 

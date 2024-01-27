@@ -177,6 +177,11 @@ public class C_NPCSpawner : MonoBehaviour
         farterSelected.isFarter = true;
     }
 
+    public void KickOut(B_NPC npc)
+    {
+        if (npcAgents.Contains(npc)) npcAgents.Remove(npc);
+    }
+
     public class MakeAConvoGroupTask : Task
     {
         float timer;

@@ -5,6 +5,7 @@ using TMPro;
 
 public class B_KickOutPrompt : MonoBehaviour
 {
+    public C_NPCSpawner spawner;
     public TextMeshProUGUI nameField;
     public B_NPC npc;
     public void PromptActive(B_NPC npc)
@@ -23,7 +24,9 @@ public class B_KickOutPrompt : MonoBehaviour
 
     public void Yes()
     {
-
+        spawner.KickOut(npc);
+        npc.KickOut();
+        PromptActive(null);
     }
     public void No()
     {
