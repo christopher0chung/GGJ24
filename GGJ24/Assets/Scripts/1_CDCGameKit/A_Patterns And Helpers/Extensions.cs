@@ -186,6 +186,14 @@ namespace CDCGameKit
 
             return source[Random.Range(0, source.Count)];
         }
+
+        public static List<T> Copy<T> (this List<T> source)
+        {
+            List<T> toReturn = new List<T>();
+            foreach (var entry in source)
+                toReturn.Add(entry);
+            return toReturn;
+        }
         #endregion
     }
 

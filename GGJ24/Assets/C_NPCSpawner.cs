@@ -14,7 +14,7 @@ public class C_NPCSpawner : MonoBehaviour
     [SerializeField] float xRange, zRange, yHeight;
     [SerializeField] int countToSpawn;
 
-    [SerializeField] List<B_NPC> npcAgents;
+    [SerializeField] List<B_NPC> allNPCs;
 
     public LayerMask agentLayerMask;
 
@@ -29,7 +29,7 @@ public class C_NPCSpawner : MonoBehaviour
     private void Start()
     {
         tm = new TaskManager();
-        npcAgents = new List<B_NPC>();
+        allNPCs = new List<B_NPC>();
         int firstNameOffset = Random.Range(0, 200);
         int lastNameOffset = Random.Range(0, 200);
         for (int i = 0; i < countToSpawn; i++)
@@ -38,13 +38,25 @@ public class C_NPCSpawner : MonoBehaviour
             Quaternion startRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
 
             GameObject newSpawn = Instantiate(prefab, spawnPos, startRotation);
-            newSpawn.name = "PartyGoer" + i.ToString();
             var controller = newSpawn.GetComponent<B_NPC>();
             controller.firstName = firstNames[(i + firstNameOffset) % firstNames.Length] ;
             controller.lastName = lastNames[(i + lastNameOffset) % lastNames.Length] ;
-            npcAgents.Add(newSpawn.GetComponent<B_NPC>());
+            newSpawn.name = controller.firstName + " " + controller.lastName;
+            allNPCs.Add(newSpawn.GetComponent<B_NPC>());
         }
         prefab.SetActive(false);
+
+        foreach (var npc in allNPCs)
+        {
+            int numberOfBestFriends = Random.Range(2, 5);
+            var tempList = allNPCs.Copy();
+            tempList.Shuffle();
+            for (int i = 0; i < numberOfBestFriends; i++)
+            {
+                npc.bestFriends.Add(tempList[i]);
+            }
+        }
+
         _AllTravel();
         _MakeAFarter();
     }
@@ -75,24 +87,29 @@ public class C_NPCSpawner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             temp = true;
-            foreach (var npc in npcAgents)
+            foreach (var npc in allNPCs)
                 npc.agent.isStopped = true;
         }
 
-        if (npcAgents.Count == countToSpawn)
-            guests.text = "Guests Present: " + npcAgents.Count;
-        else guests.text = "Guests Remaining: " + npcAgents.Count;
+        if (allNPCs.Count == countToSpawn)
+            guests.text = "Guests Present: " + allNPCs.Count;
+        else guests.text = "Guests Remaining: " + allNPCs.Count;
     }
 
     private void _MakeGroup()
     {
-        B_NPC convoStarter = npcAgents[Random.Range(0, npcAgents.Count)];
+        B_NPC convoStarter = allNPCs[Random.Range(0, allNPCs.Count)];
 
         List<B_NPC> interested = new List<B_NPC>();
         interested.Add(convoStarter);
         
         var found = Physics.OverlapSphere(convoStarter.transform.position, 1, agentLayerMask);
-        foreach (var f in found) interested.Add(f.GetComponent<B_NPC>());
+        foreach (var f in found)
+        {
+            var npcComponent = f.GetComponent<B_NPC>();
+            if (allNPCs.Contains(npcComponent))
+                interested.Add(npcComponent);
+        }
         tm.Do(new MakeAConvoGroupTask(interested));
     }
 
@@ -101,7 +118,7 @@ public class C_NPCSpawner : MonoBehaviour
         if (travelerDests == null)
         {
             travelerDests = new List<Vector3>();
-            int sqrt = npcAgents.Count;
+            int sqrt = allNPCs.Count;
             sqrt = (int)Mathf.Sqrt(sqrt);
             sqrt += 2;
 
@@ -117,7 +134,7 @@ public class C_NPCSpawner : MonoBehaviour
             }
         }
 
-        B_NPC randomTraveler = npcAgents[Random.Range(0, npcAgents.Count)];
+        B_NPC randomTraveler = allNPCs[Random.Range(0, allNPCs.Count)];
 
         Vector3 newLoc = travelerDests[Random.Range(0, travelerDests.Count)];
         bool goodLoc = false;
@@ -140,7 +157,7 @@ public class C_NPCSpawner : MonoBehaviour
     private void _AllTravel()
     {
         List<Vector3> locs = new List<Vector3>();
-        int sqrt = npcAgents.Count;
+        int sqrt = allNPCs.Count;
         sqrt = (int) Mathf.Sqrt(sqrt);
         sqrt += 2;
 
@@ -155,9 +172,9 @@ public class C_NPCSpawner : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < npcAgents.Count; i++)
+        for (int i = 0; i < allNPCs.Count; i++)
         {
-            B_NPC traveler = npcAgents[i];
+            B_NPC traveler = allNPCs[i];
 
             Vector3 newLoc = locs[Random.Range(0, locs.Count)];
             while (Vector3.Distance(traveler.transform.position, newLoc) < 4)
@@ -173,13 +190,18 @@ public class C_NPCSpawner : MonoBehaviour
 
     private void _MakeAFarter()
     {
-        B_NPC farterSelected = npcAgents[Random.Range(0, npcAgents.Count)];
+        B_NPC farterSelected = allNPCs[Random.Range(0, allNPCs.Count)];
         farterSelected.isFarter = true;
     }
 
-    public void KickOut(B_NPC npc)
+    public void Leaving(B_NPC npc)
     {
-        if (npcAgents.Contains(npc)) npcAgents.Remove(npc);
+        if (allNPCs.Contains(npc)) allNPCs.Remove(npc);
+    }
+
+    public bool BeingTracked(B_NPC me)
+    {
+        return allNPCs.Contains(me);
     }
 
     public class MakeAConvoGroupTask : Task
@@ -208,6 +230,8 @@ public class C_NPCSpawner : MonoBehaviour
                 interested[i].destinationAssigned = destination;
                 interested[i].formationTaskActive = this;
             }
+
+            SetStatus(TaskStatus.Success);
         }
 
         internal override void Update()
@@ -218,6 +242,7 @@ public class C_NPCSpawner : MonoBehaviour
             {
                 for (int i = interested.Count - 1; i >= 0; i--)
                 {
+                    if (interested[i] == null) interested.RemoveAt(i);
                     bool quitBecauseTaken = interested[i].formationTaskActive != this;
 
                     if (quitBecauseTaken)

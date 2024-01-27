@@ -112,6 +112,7 @@ Shader "PToonShader_Face"
 			float fadeDist = UnityComputeShadowFadeDistance(data.worldPos, zDist);
 			ase_lightAtten = UnityMixRealtimeAndBakedShadows(data.atten, bakedAtten, UnityComputeShadowFade(fadeDist));
 			#endif
+			float4 color257 = IsGammaSpace() ? float4(0,0,0,0) : float4(0,0,0,0);
 			float2 break135_g33 = i.uv_texcoord;
 			float2 appendResult136_g33 = (float2(break135_g33.x , ( 1.0 - break135_g33.y )));
 			float2 FlipBookUV141_g33 = appendResult136_g33;
@@ -127,8 +128,7 @@ Shader "PToonShader_Face"
 			float2 appendResult93_g33 = (float2(temp_output_92_0_g33 , ( temp_output_92_0_g33 - -0.01 )));
 			float2 break105_g33 = ( ( FlipBookUV141_g33 / appendResult83_g33 ) + ( floor( ( appendResult95_g33 * appendResult93_g33 ) ) / appendResult83_g33 ) );
 			float2 appendResult139_g33 = (float2(break105_g33.x , ( 1.0 - break105_g33.y )));
-			float4 tex2DNode30 = tex2D( _FaceSheet, appendResult139_g33 );
-			float4 lerpResult250 = lerp( _Albedo , tex2DNode30 , tex2DNode30.a);
+			float4 lerpResult250 = lerp( _Albedo , color257 , tex2D( _FaceSheet, appendResult139_g33 ).a);
 			float4 FlatColor61 = lerpResult250;
 			float4 temp_output_35_0 = ( FlatColor61 * _ShadowTint );
 			float4 lerpResult33 = lerp( FlatColor61 , temp_output_35_0 , _ShadowTintStrength);
@@ -271,7 +271,7 @@ Shader "PToonShader_Face"
 }
 /*ASEBEGIN
 Version=19202
-Node;AmplifyShaderEditor.CommentaryNode;108;-3022.353,-283.4401;Inherit;False;1139.153;766.9884;Comment;7;30;84;61;250;251;253;254;Base Color;1,1,1,1;0;0
+Node;AmplifyShaderEditor.CommentaryNode;108;-3022.353,-283.4401;Inherit;False;1139.153;766.9884;Comment;8;30;84;61;250;251;253;254;257;Base Color;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;71;-704.9181,585.8954;Inherit;False;816.6672;436.7116;Comment;7;224;116;55;56;54;80;66;Lit Color Calc;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;65;-1760.324,-279.3956;Inherit;False;1635.569;502.6198;Comment;9;195;34;33;35;62;64;133;36;31;Unlit Color Calc;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;47;-1758.208,327.4812;Inherit;False;943.0303;333.4733;Comment;6;72;45;39;40;150;149;Shadow Region;1,1,1,1;0;0
@@ -329,8 +329,9 @@ Node;AmplifyShaderEditor.RegisterLocalVarNode;61;-2090.2,-82.44;Inherit;False;Fl
 Node;AmplifyShaderEditor.FunctionNode;251;-2876.115,-57.32129;Inherit;False;Flipbook;-1;;33;53c2488c220f6564ca6c90721ee16673;6,161,0,71,0,68,0,164,1,162,1,163,1;10;51;SAMPLER2D;0.0;False;167;SAMPLERSTATE;0;False;13;FLOAT2;0,0;False;24;FLOAT;0;False;4;FLOAT;3;False;5;FLOAT;3;False;130;FLOAT;0;False;2;FLOAT;0;False;55;FLOAT;0;False;70;FLOAT;0;False;5;COLOR;53;FLOAT2;0;FLOAT;47;FLOAT;48;FLOAT;62
 Node;AmplifyShaderEditor.Vector2Node;253;-2997.115,344.6787;Inherit;False;Property;_RowsAndColums;Rows And Colums;18;0;Create;True;0;0;0;False;0;False;5,5;5,5;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
 Node;AmplifyShaderEditor.RangedFloatNode;254;-2974.115,-202.3213;Inherit;False;Property;_FrameIndex;Frame Index;19;0;Create;True;0;0;0;False;0;False;0;0;0;15;0;1;FLOAT;0
-Node;AmplifyShaderEditor.ColorNode;84;-2525.783,-232.4514;Inherit;False;Property;_Albedo;Albedo;2;0;Create;True;0;0;0;False;0;False;0,0,0,0;1,0.764706,0.1450978,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;30;-2593.353,-57.54962;Inherit;True;Property;_FaceSheet;FaceSheet;1;0;Create;True;0;0;0;False;0;False;-1;None;413b59d13ae77314c83ec83a36f76189;True;0;False;white;LockedToTexture2D;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;84;-2525.783,-232.4514;Inherit;False;Property;_Albedo;Albedo;2;0;Create;True;0;0;0;False;0;False;0,0,0,0;0.4467365,0.5754716,0.3881719,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;30;-2593.353,-57.54962;Inherit;True;Property;_FaceSheet;FaceSheet;1;0;Create;True;0;0;0;False;0;False;-1;None;4cc73acd0602e4445ae3324810328a5d;True;0;False;white;LockedToTexture2D;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;257;-2559.337,214.6527;Inherit;False;Constant;_Color0;Color 0;18;0;Create;True;0;0;0;False;0;False;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 WireConnection;72;0;45;0
 WireConnection;80;0;66;0
 WireConnection;80;1;55;0
@@ -383,7 +384,7 @@ WireConnection;249;6;156;0
 WireConnection;118;0;117;0
 WireConnection;210;11;219;0
 WireConnection;250;0;84;0
-WireConnection;250;1;30;0
+WireConnection;250;1;257;0
 WireConnection;250;2;30;4
 WireConnection;61;0;250;0
 WireConnection;251;24;254;0
@@ -391,4 +392,4 @@ WireConnection;251;4;253;2
 WireConnection;251;5;253;1
 WireConnection;30;1;251;0
 ASEEND*/
-//CHKSM=E0FC486B78AF4C3E6095B37992A9E630D14854F5
+//CHKSM=1BBA571A7D39A3A9BA6599CA5E60356BB3A4C083
