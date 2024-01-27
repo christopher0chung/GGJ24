@@ -2,12 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+using TMPro;
 
 public class B_PlayerController : MonoBehaviour
 {
     NavMeshAgent agent;
     Transform cam;
     float x, y;
+
+    public GameObject background;
+    public TextMeshProUGUI text;
+
+    public List<Image> cursors;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -36,5 +44,25 @@ public class B_PlayerController : MonoBehaviour
         Vector3 facingDir = transform.forward;
 
         agent.Move(Quaternion.LookRotation(facingDir) * moveDir * Time.deltaTime * 1.3f);
+
+        _ShowPersonName();
+    }
+
+    public LayerMask mask;
+    RaycastHit hit;
+    private void _ShowPersonName()
+    {
+        bool show = Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity, mask, QueryTriggerInteraction.Ignore);
+
+        background.gameObject.SetActive(show);
+        if (show) 
+        { 
+            var personData = hit.transform.GetComponent<B_NPC>();
+            text.text = personData.firstName + " " + personData.lastName;
+        }
+
+        bool cursorGray = !show || hit.distance > 2;
+
+        foreach (var c in cursors) c.color = cursorGray ? new Color(.2f, .2f, .2f, .5f) : Color.red;
     }
 }

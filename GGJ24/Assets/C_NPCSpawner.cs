@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+using TMPro;
 using CDCGameKit;
 
 public class C_NPCSpawner : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI guests;
     [SerializeField] GameObject prefab;
     [SerializeField] float xRange, zRange, yHeight;
     [SerializeField] int countToSpawn;
@@ -20,10 +23,15 @@ public class C_NPCSpawner : MonoBehaviour
     float newGroupTimer, randomTravelerTimer;
     List<Vector3> travelerDests;
 
+    string[] firstNames = { "Casey", "Sasha", "Jordan", "Charlie", "Kiran", "Sam", "Taylor", "Alex", "Sky", "Riley", "Morgan", "Jamie", "Cameron", "Avery", "Adrian", "Bailey", "Quinn", "Kim", "Robin", "Lee", "Parker", "Peyton", "Phoenix", "Dakota", "Blake", "Leslie", "River", "Skyler", "Hayden", "Emerson", "Francis", "Drew", "Jesse", "Taylor", "Jordan", "Micah", "Logan", "Rowan", "Sidney", "Elliott", "Eden", "Ariel", "Kai", "Pat", "Marley", "Dale", "Devon", "Reese", "Harley" };
+    string[] lastNames = { "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Lee", "White", "Harris", "Martin", "Thompson", "Garcia", "Martinez", "Robinson", "Clark", "Rodriguez", "Lewis", "Lee", "Walker", "Hall", "Allen", "Young", "Hernandez", "King", "Wright", "Lopez", "Hill", "Scott", "Green", "Adams", "Baker", "Gonzalez", "Nelson", "Carter", "Mitchell", "Perez", "Roberts", "Turner", "Phillips", "Campbell", "Parker", "Jackson", "Evans", "Edwards", "Collins", "Stewart", "Sanchez", "Morris", "Rogers", "Reed", "Cook", "Morgan", "Bell", "Murphy", "Bailey", "Rivera", "Cooper", "Richardson", "Cox", "Howard", "Ward", "Torres", "Peterson", "Gray", "Ramirez", "James", "Watson", "Brooks", "Kelly", "Sanders", "Price", "Bennett", "Wood", "Barnes", "Ross", "Henderson", "Coleman", "Jenkins", "Perry", "Powell", "Long", "Patterson", "Hughes", "Flores", "Washington", "Butler", "Simmons", "Foster", "Gonzales", "Bryant", "Alexander", "Russell", "Griffin", "Diaz", "Hayes", "Myers", "Ford", "Hamilton", "Graham", "Sullivan", "Wallace", "Woods", "Chapman", "Duncan", "Armstrong", "Berry", "Fisher", "Curtis", "Stone", "Kennedy", "Willis", "Boyd", "Olson", "Carroll", "Duncan", "Snyder", "Hart", "Cunningham", "Bradley", "Lane" };
+
     private void Start()
     {
         tm = new TaskManager();
         npcAgents = new List<B_NPC>();
+        int firstNameOffset = Random.Range(0, 200);
+        int lastNameOffset = Random.Range(0, 200);
         for (int i = 0; i < countToSpawn; i++)
         {
             Vector3 spawnPos = new Vector3(Random.Range(-xRange, xRange), yHeight, Random.Range(-zRange, zRange));
@@ -31,6 +39,9 @@ public class C_NPCSpawner : MonoBehaviour
 
             GameObject newSpawn = Instantiate(prefab, spawnPos, startRotation);
             newSpawn.name = "PartyGoer" + i.ToString();
+            var controller = newSpawn.GetComponent<B_NPC>();
+            controller.firstName = firstNames[(i + firstNameOffset) % firstNames.Length] ;
+            controller.lastName = lastNames[(i + lastNameOffset) % lastNames.Length] ;
             npcAgents.Add(newSpawn.GetComponent<B_NPC>());
         }
         prefab.SetActive(false);
@@ -67,6 +78,10 @@ public class C_NPCSpawner : MonoBehaviour
             foreach (var npc in npcAgents)
                 npc.agent.isStopped = true;
         }
+
+        if (npcAgents.Count == countToSpawn)
+            guests.text = "Guests Present: " + npcAgents.Count;
+        else guests.text = "Guests Remaining: " + npcAgents.Count;
     }
 
     private void _MakeGroup()

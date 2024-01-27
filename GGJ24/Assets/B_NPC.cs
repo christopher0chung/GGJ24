@@ -6,6 +6,8 @@ using CDCGameKit;
 
 public class B_NPC : MonoBehaviour
 {
+    public string firstName, lastName;
+
     public B_NPC speakingToLogic;
     private Transform stt;
     public Transform speakingTo 
