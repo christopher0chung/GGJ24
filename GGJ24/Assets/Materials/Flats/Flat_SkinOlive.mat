@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FaceSheet:
-        m_Texture: {fileID: 2800000, guid: 2e37296e535019e43b2c4868af23e385, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4cc73acd0602e4445ae3324810328a5d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -106,10 +106,10 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _Albedo: {r: 0.44673654, g: 0.5754717, b: 0.38817194, a: 1}
+    - _Albedo: {r: 0.4467365, g: 0.57547164, b: 0.38817188, a: 1}
     - _Color: {r: 1, g: 0.76470596, b: 0.14509805, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LightColor: {r: 1, g: 0.9576787, b: 0.8915094, a: 0}
+    - _LightColor: {r: 1, g: 0.9576786, b: 0.8915094, a: 0}
     - _RowsAndColums: {r: 5, g: 5, b: 0, a: 0}
-    - _ShadowTint: {r: 0.1981132, g: 0.17587256, b: 0.16166785, a: 1}
+    - _ShadowTint: {r: 0.19811317, g: 0.17587253, b: 0.16166782, a: 1}
   m_BuildTextureStacks: []

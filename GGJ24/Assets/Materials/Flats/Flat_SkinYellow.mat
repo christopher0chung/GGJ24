@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FaceSheet:
-        m_Texture: {fileID: 2800000, guid: 2e37296e535019e43b2c4868af23e385, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4cc73acd0602e4445ae3324810328a5d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -80,7 +80,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _Frame: 0
-    - _FrameIndex: 13.83
+    - _FrameIndex: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1

@@ -6,8 +6,10 @@ using CDCGameKit;
 
 public class B_NPC : MonoBehaviour
 {
+    public C_NPCSpawner spawner;
     public Transform exit;
     public string firstName, lastName;
+    public List<B_NPC> bestFriends;
 
     public B_NPC speakingToLogic;
     private Transform stt;
@@ -68,6 +70,14 @@ public class B_NPC : MonoBehaviour
     {
         distanceToDest = distance;
 
+        if (kickedOut)
+        {
+            if (agent.velocity.magnitude < .05f) 
+                agent.Move((exit.position - transform.position).normalized * agent.speed * Time.fixedDeltaTime);
+            if (Vector3.Distance(transform.position, exit.position) < 1) DestroyImmediate(this.gameObject);
+            return;
+        }
+
         if (isFarter)
         {
             timer += Time.fixedDeltaTime;
@@ -102,28 +112,41 @@ public class B_NPC : MonoBehaviour
     private void OnEnable()
     {
         EventManager.instance.Register<FartDetected>(Handler);
+        EventManager.instance.Register<KickedOut>(Handler);
     } 
     private void OnDisable()
     {
         EventManager.instance.Unregister<FartDetected>(Handler);
+        EventManager.instance.Unregister<KickedOut>(Handler);
     }
 
     public void Handler(EventMsg e)
     {
         var fart = e as FartDetected;
-        if (fart == null) return;
-        float distance = Vector3.Distance(transform.position, fart.pos);
-
-        bool run = Random.Range(0, distance) < 2f ? true : false;
-        bool farterRun = isFarter && (Random.Range(0, 3) == 0 ? true: false);
-
-        if (run || farterRun)
+        if (fart != null)
         {
-            var offset = Random.insideUnitSphere;
-            offset.y = 0;
-            offset *= .1f;
+            float distance = Vector3.Distance(transform.position, fart.pos);
 
-            agent.SetDestination((transform.position - fart.pos + offset).normalized * 3 + transform.position);
+            bool run = Random.Range(0, distance) < 2f ? true : false;
+            bool farterRun = isFarter && (Random.Range(0, 3) == 0 ? true: false);
+
+            if (run || farterRun)
+            {
+                var offset = Random.insideUnitSphere;
+                offset.y = 0;
+                offset *= .1f;
+
+                agent.SetDestination((transform.position - fart.pos + offset).normalized * 3 + transform.position);
+            }
+        }
+
+        var kick = e as KickedOut;
+        if (kick != null)
+        {
+            for (int i = bestFriends.Count - 1; i >= 0; i--)
+                if (bestFriends[i] == null) bestFriends.RemoveAt(i);
+
+            if(bestFriends.Contains(kick.who)) Leave();
         }
     }
 
@@ -132,7 +155,7 @@ public class B_NPC : MonoBehaviour
     {
         if (speakTimer > 3)
         {
-            if (comeToStop)
+            if (comeToStop && spawner.BeingTracked(this))
             {
                 speakTimer = 0;
                 speakingTo = t;
@@ -145,6 +168,8 @@ public class B_NPC : MonoBehaviour
 
     private void _FindSomeoneToTalkTo()
     {
+        if (spawner.BeingTracked(this) == false) return;
+
         var talkTargets = Physics.OverlapSphere(transform.position, 2.3f, NPCs);
         if (gameObject.name == "PartyGoer0")
             Debug.Log("PartyGoer0 Talk targets count = " + talkTargets.Length);
@@ -167,15 +192,19 @@ public class B_NPC : MonoBehaviour
         else speakingTo = middleOfParty;
     }
 
+    public bool kickedOut;
     public void KickOut()
     {
-        // change flag that you've been kicked out
-        // change face material to be sad faced
-        // fire an event
-        // agent.destination exit
-        
+        EventManager.instance.Fire(new KickedOut(this));
+        Leave();
+    }
 
-        // in update, if flagged and distance to exit is low, destory
+    private void Leave()
+    {
+        kickedOut = true;
+        agent.speed += .5f;
+        agent.destination = exit.position;
+        spawner.Leaving(this);
     }
 }
 
@@ -185,5 +214,14 @@ public class FartDetected : EventMsg
     public FartDetected (Vector3 pos)
     {
         this.pos = pos;
+    }
+}
+
+public class KickedOut : EventMsg
+{
+    public B_NPC who { get; set; }
+    public KickedOut(B_NPC who)
+    {
+        this.who = who;
     }
 }

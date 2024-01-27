@@ -16,6 +16,8 @@ public class B_PlayerController : MonoBehaviour
 
     public List<Image> cursors;
 
+    public B_KickOutPrompt kickoutPrompt;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -24,6 +26,9 @@ public class B_PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (kickoutPrompt.gameObject.activeSelf) return;
+
+
         x -= Input.GetAxis("Mouse Y") * Time.deltaTime * 180;
         x = Mathf.Clamp(x, -70, 70f);
         y += Input.GetAxis("Mouse X") * Time.deltaTime * 180;
@@ -44,7 +49,7 @@ public class B_PlayerController : MonoBehaviour
         Vector3 facingDir = transform.forward;
 
         agent.Move(Quaternion.LookRotation(facingDir) * moveDir * Time.deltaTime * 1.3f);
-
+        
         _ShowPersonName();
     }
 
@@ -52,17 +57,26 @@ public class B_PlayerController : MonoBehaviour
     RaycastHit hit;
     private void _ShowPersonName()
     {
-        bool show = Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity, mask, QueryTriggerInteraction.Ignore);
+        bool npcInCrosshair = Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity, mask, QueryTriggerInteraction.Ignore);
+        B_NPC personData = null;
 
-        background.gameObject.SetActive(show);
-        if (show) 
+        background.gameObject.SetActive(npcInCrosshair);
+        if (npcInCrosshair) 
         { 
-            var personData = hit.transform.GetComponent<B_NPC>();
+            personData = hit.transform.GetComponent<B_NPC>();
             text.text = personData.firstName + " " + personData.lastName;
         }
 
-        bool cursorGray = !show || hit.distance > 2;
+        bool closeEnough = npcInCrosshair && hit.distance < 2;
 
-        foreach (var c in cursors) c.color = cursorGray ? new Color(.2f, .2f, .2f, .5f) : Color.red;
+        foreach (var c in cursors) c.color = closeEnough ? Color.red : new Color(.2f, .2f, .2f, .5f);
+
+        if (closeEnough)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                kickoutPrompt.PromptActive(personData);
+            }
+        }
     }
 }
