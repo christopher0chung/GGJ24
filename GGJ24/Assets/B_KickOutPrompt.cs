@@ -11,29 +11,14 @@ public class B_KickOutPrompt : MonoBehaviour
 
     private void Awake()
     {
-        MouseShow(false);
         PromptActive(null);
     }
 
-    private void MouseShow(bool show)
-    {
-        if (show)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
     public void PromptActive(B_NPC npc)
     {
         if (npc == null)
         {
             this.npc = null;
-            MouseShow(false);
             gameObject.SetActive(false);
         }
         else
@@ -41,7 +26,6 @@ public class B_KickOutPrompt : MonoBehaviour
             gameObject.SetActive(true);
             this.npc = npc;
             nameField.text = this.npc.firstName + " " + this.npc.lastName;
-            MouseShow(true);
         }
     }
 
