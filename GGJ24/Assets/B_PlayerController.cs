@@ -18,6 +18,7 @@ public class B_PlayerController : MonoBehaviour
     public List<Image> cursors;
 
     public B_KickOutPrompt kickoutPrompt;
+    public GameObject quitMenu;
 
     bool gameOver;
 
@@ -35,6 +36,26 @@ public class B_PlayerController : MonoBehaviour
         gameOver = true;
     }
 
+    private void CursorOnOff(bool on)
+    {
+        if (on)
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+        }
+        else
+        {
+            if (Cursor.lockState == CursorLockMode.None)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
+    }
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -49,7 +70,7 @@ public class B_PlayerController : MonoBehaviour
             return;
         }
 
-
+        CursorOnOff(kickoutPrompt.gameObject.activeSelf || quitMenu.gameObject.activeSelf);
         if (kickoutPrompt.gameObject.activeSelf) return;
 
 

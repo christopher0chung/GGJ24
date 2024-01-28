@@ -6,6 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 using TMPro;
 using CDCGameKit;
+using UnityEngine.SceneManagement;
 
 public class C_NPCSpawner : MonoBehaviour
 {
@@ -205,6 +206,11 @@ public class C_NPCSpawner : MonoBehaviour
     public bool BeingTracked(B_NPC me)
     {
         return allNPCs.Contains(me);
+    }
+
+    public void LoadOtherScene()
+    {
+        SceneManager.LoadScene(0);
     }
 
     //public class MakeAConvoGroupTask : Task
