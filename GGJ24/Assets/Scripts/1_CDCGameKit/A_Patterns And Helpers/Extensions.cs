@@ -153,6 +153,12 @@ namespace CDCGameKit
 
             return (Color)toReturn;
         }
+
+        public static Color AlphaZero(this Color c)
+        {
+            c.a = 0;
+            return c;
+        }
         #endregion
 
         #region Lists
@@ -216,6 +222,14 @@ namespace CDCGameKit
 
     public static class Tools
     {
+        public static class Colors
+        {
+            public static Color Random(float alpha = 1, bool randomAlpha = false)
+            {
+                if (randomAlpha) alpha = UnityEngine.Random.value;
+                return new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, alpha);
+            }
+        }
         public static class Math
         {
             #region Floats

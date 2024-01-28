@@ -194,6 +194,7 @@ public class C_NPCSpawner : MonoBehaviour
     {
         B_NPC farterSelected = allNPCs[Random.Range(0, allNPCs.Count)];
         farterSelected.isFarter = true;
+        Debug.Log(farterSelected.firstName + " " + farterSelected.lastName + " is the farter");
     }
 
     public void Leaving(B_NPC npc)
