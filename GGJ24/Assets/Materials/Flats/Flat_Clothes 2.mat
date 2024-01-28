@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Flat_Blue
+  m_Name: Flat_Clothes 2
   m_Shader: {fileID: 4800000, guid: 855ca259613a5834c9cbd29ab068c46f, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -99,7 +99,7 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _Albedo: {r: 0.09803916, g: 0.15686268, b: 1, a: 1}
+    - _Albedo: {r: 0.854902, g: 0.43137258, b: 0.3647059, a: 1}
     - _Color: {r: 0.098039225, g: 0.16078432, b: 0.97647065, a: 0}
     - _Color0: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

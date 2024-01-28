@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Flat_SkinDBrown
+  m_Name: Flat_Clothes 7
   m_Shader: {fileID: 4800000, guid: 855ca259613a5834c9cbd29ab068c46f, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FaceSheet:
-        m_Texture: {fileID: 2800000, guid: 4cc73acd0602e4445ae3324810328a5d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1ed9162076b3a0043b7c67466331c67d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -64,10 +64,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _TextureSample0:
-        m_Texture: {fileID: 2800000, guid: 413b59d13ae77314c83ec83a36f76189, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -75,11 +71,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
-    - _Columns: 5
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Frame: 0
     - _FrameIndex: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -94,7 +88,6 @@ Material:
     - _NormalPower: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Rows: 5
     - _ShadowBoost: 0
     - _ShadowTintStrength: 0.5
     - _Shininess: 0.01
@@ -106,10 +99,11 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _Albedo: {r: 0.24528301, g: 0.1404689, b: 0.12611249, a: 1}
-    - _Color: {r: 1, g: 0.76470596, b: 0.14509805, a: 1}
+    - _Albedo: {r: 0.8745099, g: 0.80392164, b: 0.9843138, a: 1}
+    - _Color: {r: 0.098039225, g: 0.16078432, b: 0.97647065, a: 0}
+    - _Color0: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LightColor: {r: 1, g: 0.9576787, b: 0.8915094, a: 0}
+    - _LightColor: {r: 1, g: 0.9576786, b: 0.8915094, a: 0}
     - _RowsAndColums: {r: 4, g: 4, b: 0, a: 0}
-    - _ShadowTint: {r: 0.1981132, g: 0.17587256, b: 0.16166785, a: 1}
+    - _ShadowTint: {r: 0.19811317, g: 0.17587253, b: 0.16166782, a: 1}
   m_BuildTextureStacks: []
