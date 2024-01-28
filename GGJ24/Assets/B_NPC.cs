@@ -28,6 +28,7 @@ public class B_NPC : MonoBehaviour
         }
     }
     public Transform middleOfParty;
+    public GameObject exclamationMark;
 
     //public C_NPCSpawner.MakeAConvoGroupTask formationTaskActive;
 
@@ -72,6 +73,8 @@ public class B_NPC : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (leaving != exclamationMark.activeSelf) exclamationMark.SetActive(leaving);
+
         distanceToDest = distance;
 
         if (leaving)
@@ -162,6 +165,7 @@ public class B_NPC : MonoBehaviour
             for (int i = bestFriends.Count - 1; i >= 0; i--)
                 if (bestFriends[i] == null) bestFriends.RemoveAt(i);
 
+            if (isFarter) return;
             if (kick.who.isFarter) return;
 
             if (bestFriends.Contains(kick.who)) Leave("because best friend is leaving");
@@ -233,7 +237,8 @@ public class B_NPC : MonoBehaviour
     public bool leaving;
     public void KickOut()
     {
-        EventManager.instance.Fire(new KickedOut(this));
+        if (isFarter) EventManager.instance.Fire(new FarterFound());
+        else EventManager.instance.Fire(new KickedOut(this));
         Leave("because kicked out by host");
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using TMPro;
+using CDCGameKit;
 
 public class B_PlayerController : MonoBehaviour
 {
@@ -18,6 +19,22 @@ public class B_PlayerController : MonoBehaviour
 
     public B_KickOutPrompt kickoutPrompt;
 
+    bool gameOver;
+
+    private void OnEnable()
+    {
+        EventManager.instance.Register<FarterFound>(Handler);
+    }
+    private void OnDisable()
+    {
+        EventManager.instance.Unregister<FarterFound>(Handler);
+    }
+
+    public void Handler(EventMsg e)
+    {
+        gameOver = true;
+    }
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -26,6 +43,13 @@ public class B_PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (gameOver)
+        {
+            kickoutPrompt.gameObject.SetActive(false);
+            return;
+        }
+
+
         if (kickoutPrompt.gameObject.activeSelf) return;
 
 
