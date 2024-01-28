@@ -153,6 +153,18 @@ public class B_RandomConfigurator : MonoBehaviour
         }
     }
 
+    public void GetSad()
+    {
+        var mr = head.GetComponent<MeshRenderer>();
+        mr.material.SetFloat("_FrameIndex", Random.Range(5, 8));
+    }
+
+    public void GetMad()
+    {
+        var mr = head.GetComponent<MeshRenderer>();
+        mr.material.SetFloat("_FrameIndex", Random.Range(8, 10));
+    }
+
     void ApplyMats()
     {
         var hairMat = hairMats.RandomOne();
