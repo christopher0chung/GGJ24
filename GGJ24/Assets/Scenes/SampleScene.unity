@@ -221,6 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bb42fc97a6754489672976c8757b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawner: {fileID: 393111149}
 --- !u!82 &53204051
 AudioSource:
   m_ObjectHideFlags: 0
@@ -571,6 +572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bb42fc97a6754489672976c8757b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawner: {fileID: 393111149}
 --- !u!82 &171705940
 AudioSource:
   m_ObjectHideFlags: 0
@@ -809,11 +811,10 @@ MonoBehaviour:
   zRange: 9
   yHeight: 1.2
   countToSpawn: 100
-  npcAgents: []
+  allNPCs: []
   agentLayerMask:
     serializedVersion: 2
     m_Bits: 128
-  taskCount: 0
 --- !u!4 &393111150
 Transform:
   m_ObjectHideFlags: 0
@@ -3407,6 +3408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bb42fc97a6754489672976c8757b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawner: {fileID: 393111149}
 --- !u!82 &1410935747
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3723,6 +3725,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bb42fc97a6754489672976c8757b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawner: {fileID: 393111149}
 --- !u!82 &1465693622
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3956,6 +3959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bb42fc97a6754489672976c8757b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawner: {fileID: 393111149}
 --- !u!82 &1629369334
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4386,6 +4390,7 @@ MonoBehaviour:
   exit: {fileID: 779414992}
   firstName: 
   lastName: 
+  bestFriends: []
   speakingToLogic: {fileID: 0}
   middleOfParty: {fileID: 1465693623}
   agent: {fileID: 0}
@@ -4397,7 +4402,7 @@ MonoBehaviour:
   NPCs:
     serializedVersion: 2
     m_Bits: 128
-  kickedOut: 0
+  leaving: 0
 --- !u!136 &2020077846
 CapsuleCollider:
   m_ObjectHideFlags: 0

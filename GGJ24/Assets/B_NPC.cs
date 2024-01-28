@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +29,7 @@ public class B_NPC : MonoBehaviour
     }
     public Transform middleOfParty;
 
-    public C_NPCSpawner.MakeAConvoGroupTask formationTaskActive;
+    //public C_NPCSpawner.MakeAConvoGroupTask formationTaskActive;
 
     public NavMeshAgent agent;
 
@@ -62,15 +63,18 @@ public class B_NPC : MonoBehaviour
         }
     }
 
+    float moveAroundTimer, moveAroundInterval;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        moveAroundInterval = Random.Range(1f, 30f);
     }
     private void FixedUpdate()
     {
         distanceToDest = distance;
 
-        if (kickedOut)
+        if (leaving)
         {
             if (agent.velocity.magnitude < .05f) 
                 agent.Move((exit.position - transform.position).normalized * agent.speed * Time.fixedDeltaTime);
@@ -90,7 +94,7 @@ public class B_NPC : MonoBehaviour
             }
         }
 
-        if (gameObject.name == "PartyGoer0") Debug.Log("PartyGoer0 " + (agent.velocity.magnitude < .05f) + " " + agent.velocity.magnitude);
+        //if (gameObject.name == "PartyGoer0") Debug.Log("PartyGoer0 " + (agent.velocity.magnitude < .05f) + " " + agent.velocity.magnitude);
         comeToStop = agent.velocity.magnitude < .03f;
         if (comeToStop)
         {
@@ -98,14 +102,16 @@ public class B_NPC : MonoBehaviour
 
             if (speakingToLogic != null && speakingToLogic.speakingTo != transform) _FindSomeoneToTalkTo();
 
-            if (speakingTo == null)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(middleOfParty.position - transform.position), Time.deltaTime * 5f);
-            }
-            else
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(speakingTo.position - transform.position), Time.deltaTime * 5f);
-            }
+            if (speakingTo != null) transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(speakingTo.position - transform.position), Time.deltaTime * 5f);
+        }
+
+        moveAroundTimer += Time.deltaTime;
+        if (moveAroundTimer >= moveAroundInterval)
+        {
+            moveAroundInterval = Random.Range(25f, 70f);
+            moveAroundTimer = 0;
+            Vector3 newLoc = new Vector3(Random.Range(-9f, 9f), .5f, Random.Range(-9f, 9f));
+            _MoveAgent("somewhere else to switch it up", newLoc);
         }
     }
 
@@ -125,18 +131,28 @@ public class B_NPC : MonoBehaviour
         var fart = e as FartDetected;
         if (fart != null)
         {
+            if (isFarter) return;
+
             float distance = Vector3.Distance(transform.position, fart.pos);
 
             bool run = Random.Range(0, distance) < 2f ? true : false;
-            bool farterRun = isFarter && (Random.Range(0, 3) == 0 ? true: false);
+            bool tooClose = distance < 2.5f;
 
-            if (run || farterRun)
+            if (run || isFarter)
             {
                 var offset = Random.insideUnitSphere;
                 offset.y = 0;
                 offset *= .1f;
 
-                agent.SetDestination((transform.position - fart.pos + offset).normalized * 3 + transform.position);
+                if (run)
+                    _MoveAgent("away from fart", (transform.position - fart.pos + offset).normalized * 3 + transform.position);
+                if (isFarter)
+                    _MoveAgent("away from fart for deniability", (transform.position - fart.pos + offset).normalized * 3 + transform.position);
+
+            }
+            else if (tooClose)
+            {
+                if (Random.value < .35f) Leave("because too close to fart");
             }
         }
 
@@ -146,7 +162,20 @@ public class B_NPC : MonoBehaviour
             for (int i = bestFriends.Count - 1; i >= 0; i--)
                 if (bestFriends[i] == null) bestFriends.RemoveAt(i);
 
-            if(bestFriends.Contains(kick.who)) Leave();
+            if (kick.who.isFarter) return;
+
+            if (bestFriends.Contains(kick.who)) Leave("because best friend is leaving");
+            else
+            {
+                var frac = spawner.GuestsRemainingFrac;
+                Debug.Log(frac);
+                frac = frac.Invert();
+                Debug.Log(frac);
+                frac *= frac;
+                Debug.Log(frac);
+
+                if (Random.value <= frac) Leave("because host is being agro");
+            }
         }
     }
 
@@ -170,13 +199,12 @@ public class B_NPC : MonoBehaviour
     {
         if (spawner.BeingTracked(this) == false) return;
 
-        var talkTargets = Physics.OverlapSphere(transform.position, 2.3f, NPCs);
-        if (gameObject.name == "PartyGoer0")
-            Debug.Log("PartyGoer0 Talk targets count = " + talkTargets.Length);
-        if (talkTargets.Length > 0)
+        var talkTargets = Physics.OverlapSphere(transform.position, 2.3f, NPCs).ToList();
+        if (talkTargets.Contains(GetComponent<Collider>())) talkTargets.Remove(GetComponent<Collider>());
+        if (talkTargets.Count > 0)
         {
             bool foundSomeone = false;
-            for (int i = 0; i < talkTargets.Length; i++)
+            for (int i = 0; i < talkTargets.Count; i++)
             {
                 if (talkTargets[i].GetComponent<B_NPC>().WillYouSpeakToMe(transform))
                 {
@@ -189,21 +217,33 @@ public class B_NPC : MonoBehaviour
 
             if (foundSomeone == false) speakingTo = middleOfParty;
         }
-        else speakingTo = middleOfParty;
+        else _TrySomewhereElse();
+    }
+    private void _TrySomewhereElse()
+    {
+        Vector3 newLoc = new Vector3(Random.Range(-9f, 9f), .5f, Random.Range(-9f, 9f));
+        _MoveAgent("somewhere else at the party because no one to talk to", newLoc);
+    }
+    private void _MoveAgent(string whereAndWhy, Vector3 loc)
+    {
+        Debug.Log(firstName + " " + lastName + " is moving to " + whereAndWhy + ".");
+        agent.SetDestination(loc);
     }
 
-    public bool kickedOut;
+    public bool leaving;
     public void KickOut()
     {
         EventManager.instance.Fire(new KickedOut(this));
-        Leave();
+        Leave("because kicked out by host");
     }
 
-    private void Leave()
+    private void Leave(string extraReason = "")
     {
-        kickedOut = true;
+        leaving = true;
         agent.speed += .5f;
-        agent.destination = exit.position;
+        string reason = "leaving the party";
+        if (extraReason != "") reason += " " + extraReason;
+        _MoveAgent(reason, exit.position);
         spawner.Leaving(this);
     }
 }
@@ -225,3 +265,5 @@ public class KickedOut : EventMsg
         this.who = who;
     }
 }
+
+public class FarterFound : EventMsg { }

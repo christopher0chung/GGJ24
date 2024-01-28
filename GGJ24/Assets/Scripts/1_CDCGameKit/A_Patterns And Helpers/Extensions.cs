@@ -16,7 +16,6 @@ namespace CDCGameKit
 
             return Mathf.Lerp(newMin, newMax, fraction);
         }
-
         public static float Fraction(this float value, float lower, float uppper, bool clamped = true)
         {
             var toReturn = (value - lower) / (uppper - lower);
@@ -24,6 +23,24 @@ namespace CDCGameKit
             if (clamped) toReturn = Mathf.Clamp01(toReturn);
 
             return toReturn;
+        }
+        /// <summary>
+        /// Returns inverted value. Original is unchanged.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static float Invert (this float value)
+        {
+            if (value > 1 || value < 0)
+            {
+                Debug.LogWarning("Cannot invert value because outside of 0 to 1. Returning original value of " + value);
+                return value;
+            }
+            else 
+            {
+                value = 1 - value;
+                return value; 
+            }
         }
         #endregion
 
