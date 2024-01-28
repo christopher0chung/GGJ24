@@ -135,6 +135,7 @@ public class B_NPC : MonoBehaviour
         if (fart != null)
         {
             if (isFarter) return;
+            if (leaving) return;
 
             float distance = Vector3.Distance(transform.position, fart.pos);
 
