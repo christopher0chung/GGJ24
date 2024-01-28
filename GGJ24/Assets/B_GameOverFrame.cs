@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CDCGameKit;
+using TMPro;
 
 public class B_GameOverFrame : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class B_GameOverFrame : MonoBehaviour
     public List<GameObject> managedChildren;
     public Image border, frame, background;
     float timer;
+
+    public C_NPCSpawner spawner;
+    public TextMeshProUGUI lastLine;
 
     void Start()
     {
@@ -42,6 +46,8 @@ public class B_GameOverFrame : MonoBehaviour
             foreach (var c in managedChildren)
                 c.SetActive(true);
             SFX.instance.OneShotUI("PartyHorn");
+
+            if (spawner.GuestsRemainingFrac >= .65f) lastLine.text = "";
         }
     }
 

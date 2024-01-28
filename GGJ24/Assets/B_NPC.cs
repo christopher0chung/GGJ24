@@ -135,6 +135,7 @@ public class B_NPC : MonoBehaviour
         if (fart != null)
         {
             if (isFarter) return;
+            if (leaving) return;
 
             float distance = Vector3.Distance(transform.position, fart.pos);
 
@@ -186,6 +187,8 @@ public class B_NPC : MonoBehaviour
     float speakTimer;
     public bool WillYouSpeakToMe(Transform t)
     {
+        if (leaving) return false;
+
         if (speakTimer > 3)
         {
             if (comeToStop && spawner.BeingTracked(this))
@@ -250,6 +253,10 @@ public class B_NPC : MonoBehaviour
         if (extraReason != "") reason += " " + extraReason;
         _MoveAgent(reason, exit.position);
         spawner.Leaving(this);
+        var avatar = transform.GetComponentInChildren<B_RandomConfigurator>();
+
+        if (isFarter) avatar.GetSad();
+        else avatar.GetMad();
     }
 }
 
