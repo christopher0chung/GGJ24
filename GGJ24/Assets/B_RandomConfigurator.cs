@@ -8,7 +8,7 @@ public class B_RandomConfigurator : MonoBehaviour
 {
     [SerializeField] GameObject head, hair, torso, shoulderL, shoulderR, uarmL, uarmR, farmL, farmR, pelvis, ulegL, ulegR, llegL, llegR, footL, footR;
 
-    public List<Material> hairMats, clothingMats, skinMats, shoeMats;
+    public List<Material> hairMats, clothingMats, skinMats;
 
     Animator anim;
     NavMeshAgent agent;
@@ -159,7 +159,7 @@ public class B_RandomConfigurator : MonoBehaviour
         var skinMat = skinMats.RandomOne();
         var shirtMat = clothingMats.RandomOne();
         var pantsMat = clothingMats.RandomOne();
-        var shoeMat = shoeMats.RandomOne();
+        var shoeMat = clothingMats.RandomOne();
 
         hair.GetComponent<MeshRenderer>().material = hairMat;
 

@@ -1975,33 +1975,9 @@ MonoBehaviour:
   llegR: {fileID: 0}
   footL: {fileID: 0}
   footR: {fileID: 0}
-  hairMats:
-  - {fileID: 2100000, guid: 2fa1b57ab4d48f34b822d057f994d0c5, type: 2}
-  - {fileID: 2100000, guid: 07343c50144e85b47ba40567a329c713, type: 2}
-  - {fileID: 2100000, guid: 1f7909857c619dd4682fcfbf0d7f7651, type: 2}
-  - {fileID: 2100000, guid: 1c8fff07a84875042ab1b3fab5856674, type: 2}
-  - {fileID: 2100000, guid: 41d5656afbf77cc4f9da7cb05cfa4164, type: 2}
-  clothingMats:
-  - {fileID: 2100000, guid: f6d8e2c14ac2df441b9197c00fdf6762, type: 2}
-  - {fileID: 2100000, guid: cee6875ff827dde4b821f19a84faaef3, type: 2}
-  - {fileID: 2100000, guid: bc10f1bed33df7a49b384e57a074ba97, type: 2}
-  - {fileID: 2100000, guid: dad15855833fcbc468de04c376119ea4, type: 2}
-  - {fileID: 2100000, guid: 0ebe6e4981086aa4592a5ec7419eb0f7, type: 2}
-  - {fileID: 2100000, guid: 7bd2645e0a84c6e42a58054a0ce0bae2, type: 2}
-  skinMats:
-  - {fileID: 2100000, guid: ee650fc8341e74e45b1cea2489e0a7a8, type: 2}
-  - {fileID: 2100000, guid: 5fe9615439b02ce45839f9948b8a4664, type: 2}
-  - {fileID: 2100000, guid: 831ba0dac8fab534fa363876a0698aa9, type: 2}
-  - {fileID: 2100000, guid: ca80a6ae8b7814d49bfeb0efd1318c30, type: 2}
-  - {fileID: 2100000, guid: d09bb0e44fad4aa4fb4f382956bf1270, type: 2}
-  - {fileID: 2100000, guid: ee650fc8341e74e45b1cea2489e0a7a8, type: 2}
-  shoeMats:
-  - {fileID: 2100000, guid: f6d8e2c14ac2df441b9197c00fdf6762, type: 2}
-  - {fileID: 2100000, guid: cee6875ff827dde4b821f19a84faaef3, type: 2}
-  - {fileID: 2100000, guid: bc10f1bed33df7a49b384e57a074ba97, type: 2}
-  - {fileID: 2100000, guid: dad15855833fcbc468de04c376119ea4, type: 2}
-  - {fileID: 2100000, guid: 0ebe6e4981086aa4592a5ec7419eb0f7, type: 2}
-  - {fileID: 2100000, guid: 7bd2645e0a84c6e42a58054a0ce0bae2, type: 2}
+  hairMats: []
+  clothingMats: []
+  skinMats: []
   walkSpeed: 2
 --- !u!4 &1027394724 stripped
 Transform:
